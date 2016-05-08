@@ -12,6 +12,10 @@ module TownCrier
       set :views, './views'
     end
 
+    configure :production do
+      enable :logging
+    end
+
     OCTOKIT_CLIENT = Octokit::Client.new(access_token: ENV['GITHUB_OAUTH_TOKEN'])
 
     get '/' do
