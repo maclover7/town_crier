@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'tilt/erb'
 require 'octokit'
+require 'travis'
 require 'action_view'
 require 'action_view/helpers'
 
@@ -23,10 +24,24 @@ module TownCrier
     end
 
     get '/data/ecosystem' do
-      @projects = []
-      @projects << ['rspec/rspec-rails', 'failing']
+      projects = [
+        { name: 'codetriage/codetriage' },
+        { name: 'discourse/discourse' },
+        { name: 'rspec/rspec-rails' }
+      ]
 
-      erb :details_ecosystem, locals: { projects: @projects }, layout: false
+      projects.each do |p|
+        repo = Travis::Repository.find(p[:name])
+        build = repo.branch('master')
+        build = build.jobs.find do |j|
+          (j.config['env'] == 'RAILS_MASTER=1' || j.config['env'] == 'RAILS_VERSION=master') &&
+          j.config['rvm'].include?('2.3')
+        end
+        p[:target_url] = "https://travis-ci.org/#{p[:name]}/jobs/#{build.id}"
+        p[:state] = build.state
+      end
+
+      erb :details_ecosystem, locals: { projects: projects }, layout: false
     end
 
     get '/data/master' do

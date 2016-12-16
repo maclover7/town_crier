@@ -6,6 +6,7 @@ gem 'actionview'
 gem 'octokit'
 gem 'puma'
 gem 'sinatra'
+gem 'travis'
 
 group :development do
   gem 'pry'

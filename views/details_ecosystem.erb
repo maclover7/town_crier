@@ -7,10 +7,10 @@
   </thead>
 
   <tbody>
-    <% projects.each do |name, status| %>
+    <% projects.each do |project| %>
       <tr>
-        <th scope="row"><%= status %></th>
-        <td><%= name %></td>
+        <th scope="row"><a href="<%= project[:target_url] %>"><%= project[:state] %></a></th>
+        <td><%= project[:name] %></td>
       </tr>
     <% end %>
   </tbody>
