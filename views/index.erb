@@ -1,49 +1,11 @@
 <div class="row">
   <div class="col-md-8">
     <h3 class="center">Master:</h3>
-
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Commit Message</th>
-          <th>Committer</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @commits.each do |commit, status| %>
-          <tr>
-            <th scope="row"><a href="<%= status[:target_url] %>"><%= status[:state] %></a></th>
-            <td> <b><%= commit.commit.author.name %></b> </td>
-            <td> <a href="<%= commit.html_url %>"><%= commit.commit.message.split("\n\n")[0] %></a> </td>
-            <td> <%= time_ago_in_words(Time.now - (Time.now - commit.commit.committer.date.to_time).to_i) + ' ago' %> </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= erb :details_master, locals: { commits: @commits } %>
   </div>
 
   <div class="col-md-4">
     <h3 class="center">Ecosystem:</h3>
-
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Project</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @projects.each do |name, status| %>
-          <tr>
-            <th scope="row"><%= status %></th>
-            <td><%= name %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <%= erb :details_ecosystem, locals: { projects: @projects } %>
   </div>
 </div>

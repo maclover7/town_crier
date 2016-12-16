@@ -1,0 +1,17 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Project</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% projects.each do |name, status| %>
+      <tr>
+        <th scope="row"><%= status %></th>
+        <td><%= name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
