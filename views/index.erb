@@ -1,11 +1,23 @@
+<script>
+  $(document).ready(function() {
+    $.get('data/master', function(data) {
+      $('#master').html(data);
+    });
+
+    $.get('data/ecosystem', function(data) {
+      $('#ecosystem').html(data);
+    });
+  });
+</script>
+
 <div class="row">
   <div class="col-md-8">
     <h3 class="center">Master:</h3>
-    <%= erb :details_master, locals: { commits: @commits } %>
+    <div id="master">Loading...</div>
   </div>
 
   <div class="col-md-4">
     <h3 class="center">Ecosystem:</h3>
-    <%= erb :details_ecosystem, locals: { projects: @projects } %>
+    <div id="ecosystem">Loading...</div>
   </div>
 </div>

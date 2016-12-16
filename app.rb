@@ -19,6 +19,17 @@ module TownCrier
     OCTOKIT_CLIENT = Octokit::Client.new(access_token: ENV['GITHUB_OAUTH_TOKEN'])
 
     get '/' do
+      erb :index
+    end
+
+    get '/data/ecosystem' do
+      @projects = []
+      @projects << ['rspec/rspec-rails', 'failing']
+
+      erb :details_ecosystem, locals: { projects: @projects }, layout: false
+    end
+
+    get '/data/master' do
       @commits = []
       OCTOKIT_CLIENT.commits(ENV['REPO'], 'master').each { |c| @commits << [c] }
 
@@ -30,10 +41,7 @@ module TownCrier
         end
       end
 
-      @projects = []
-      @projects << ['rspec/rspec-rails', 'failing']
-
-      erb :index
+      erb :details_master, locals: { commits: @commits }, layout: false
     end
   end
 end
