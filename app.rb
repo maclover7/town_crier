@@ -24,9 +24,9 @@ module TownCrier
 
       @commits.each do |commit|
         if commit[0].commit.message.include?('ci skip') || commit[0].commit.message.include?('skip ci')
-          commit << 'n/a'
+          commit << { target_url: '', state: 'n/a' }
         else
-          commit << OCTOKIT_CLIENT.status(ENV['REPO'], commit[0].sha)[:state]
+          commit << (OCTOKIT_CLIENT.status(ENV['REPO'], commit[0].sha)[:statuses].last || { target_url: '', state: 'n/a' })
         end
       end
 
