@@ -30,6 +30,9 @@ module TownCrier
         end
       end
 
+      @projects = []
+      @projects << ['rspec/rspec-rails', 'failing']
+
       erb :index
     end
   end
