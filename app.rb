@@ -27,16 +27,14 @@ module TownCrier
       projects = [
         { name: 'codetriage/codetriage' },
         { name: 'discourse/discourse' },
+        { name: 'airblade/paper_trail' },
         { name: 'rspec/rspec-rails' }
       ]
 
       projects.each do |p|
         repo = Travis::Repository.find(p[:name])
-        build = repo.branch('master')
-        build = build.jobs.find do |j|
-          (j.config['env'] == 'RAILS_MASTER=1' || j.config['env'] == 'RAILS_VERSION=master') &&
-          j.config['rvm'].include?('2.3')
-        end
+        jobs = repo.last_build.jobs
+        build = jobs.find { |j| valid_job?(j) }
         p[:target_url] = "https://travis-ci.org/#{p[:name]}/jobs/#{build.id}"
         p[:state] = build.state
       end
@@ -57,6 +55,19 @@ module TownCrier
       end
 
       erb :details_master, locals: { commits: @commits }, layout: false
+    end
+
+    private
+
+    def valid_job?(job)
+      (job.config['rvm'].to_f >= 2.3) &&
+      (
+        job.config['env'] == 'RAILS_MASTER=1' ||
+        # rspec/rspec-rails
+        job.config['env'] == 'RAILS_VERSION=master' ||
+        # aiblade/paper_trail
+        (job.config['gemfile'] && job.config['gemfile'] == 'gemfiles/ar_master.gemfile')
+      )
     end
   end
 end
